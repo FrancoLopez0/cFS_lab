@@ -98,6 +98,7 @@ LIST(APPEND MISSION_GLOBAL_APPLIST lc)
 LIST(APPEND MISSION_GLOBAL_APPLIST sc)
 LIST(APPEND MISSION_GLOBAL_APPLIST ds)
 LIST(APPEND MISSION_GLOBAL_APPLIST hk)
+LIST(APPEND MISSION_GLOBAL_APPLIST hello_world)
 
 # Some apps do not have EDS support yet.
 # These should not be included by default when building with EDS.

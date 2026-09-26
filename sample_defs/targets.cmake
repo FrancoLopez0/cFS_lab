@@ -147,3 +147,8 @@ if (CFE_EDS_ENABLED)
    set(cpu1_PLATFORM default)
    set(cpu2_PLATFORM default)
 endif (CFE_EDS_ENABLED)
+
+# cfs.py: acs (cpu1)
+if (NOT CFE_EDS_ENABLED)
+    list(APPEND cpu1_APPLIST acs)
+endif()

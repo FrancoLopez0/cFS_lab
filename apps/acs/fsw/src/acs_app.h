@@ -17,7 +17,7 @@ typedef struct{
 } ACS_APP_Data_t;
 
 
-void ACS_Main(void);
+void ACS_AppMain(void);
 CFE_Status_t ACS_APP_Init(void);
 
 #endif /* ACS_APP_H */

@@ -1,11 +1,11 @@
-#include "mpu6050.h"
 #include "acs_app.h"
+#include "mpu6050.h"
 
 #define ACS_PERF_ID 6767
 
 ACS_APP_Data_t ACS_APP_Data;
 
-void ACS_Main(void){
+void ACS_AppMain(void){
     CFE_Status_t     status;
 
     // CFE_ES_PerfLogEntry(HELLO_WORLD_PERF_ID);
@@ -24,7 +24,7 @@ void ACS_Main(void){
 }
 
 CFE_Status_t ACS_APP_Init(void){
-    CFE_ES_WriteToSysLog("HELLO_WORLD_APP: Iniciando app");
+    CFE_ES_WriteToSysLog("ACS_APP: Iniciando app");
     ACS_APP_Data.RunStatus = CFE_ES_RunStatus_APP_RUN;
     return CFE_SUCCESS;
 }

@@ -29,7 +29,7 @@
 #define USER_CTRL_REG		0x6A
 #define MPU_CONFIG_REG      0x1A
 
-#define MPU6050_I2C_ADDR  	0x69 // Default I2C address for MPU6050
+#define MPU6050_I2C_ADDR  	0x68 // Default I2C address for MPU6050
 #define INT_OSC           	0x00 // Internal oscillator
 #define SAMPLE_RATE_1KHZ  	0x07
 

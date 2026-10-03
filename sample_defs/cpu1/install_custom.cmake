@@ -30,6 +30,13 @@ if (TARGET sbn)
     )
 endif()
 
+if (TARGET acs)
+    list(APPEND APP_INCLUDE_TABLE_LIST
+        $<TARGET_PROPERTY:acs,INCLUDE_DIRECTORIES>
+    )
+    list(APPEND APP_DEFINITION_TABLE_LIST CFS_ACS_ENABLED)
+endif()
+
 # specify extra include dirs for to_lab + sch_lab table builds
 target_include_directories(to_lab.table INTERFACE ${APP_INCLUDE_TABLE_LIST})
 target_compile_definitions(to_lab.table INTERFACE ${APP_DEFINITION_TABLE_LIST})

@@ -9,12 +9,19 @@ static int mpu6050_file;
 static inline void mpu6050_write(uint8_t reg, uint8_t *src, uint8_t len) {
     // Array completo para enviar
     uint8_t buff[20] = {0};
+    if(len > sizeof(buff) - 1){
+        return -1;
+    }
     // Registro a escribir
     buff[0] = reg;
     // Copio los otros
     for(uint8_t i = 0; i < len; i++) { buff[i + 1] = src[i]; }
     // Inicio la comunicacion
-    write(mpu6050_file, buff, len + 1);
+    if( write(mpu6050_file, buff, len + 1) != (ssize_t) (len +1)){
+        return -1;
+    }
+    
+    return 0;
 }
 
 static inline void mpu6050_read(uint8_t reg, uint8_t *dst, uint8_t len) {

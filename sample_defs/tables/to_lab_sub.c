@@ -47,6 +47,10 @@
 #include "sc_msgids.h"
 #include "ds_msgids.h"
 #include "hk_msgids.h"
+#ifdef CFS_ACS_ENABLED
+    #include "acs_msgids.h"
+#endif
+
 
 #ifdef CFS_SBN_ENABLED
 #include "sbn_msgids.h"
@@ -93,6 +97,10 @@ TO_LAB_Subs_t TO_LAB_Subs =
         {CFE_SB_MSGID_WRAP_VALUE(DS_HK_TLM_MID),         {0, 0}, 1},
         {CFE_SB_MSGID_WRAP_VALUE(LC_HK_TLM_MID),         {0, 0}, 1},
         {CFE_SB_MSGID_WRAP_VALUE(CS_HK_TLM_MID),         {0, 0}, 1},
+        //agregado para la telemetria del ACS
+        #ifdef CFS_ACS_ENABLED
+            {CFE_SB_MSGID_WRAP_VALUE(ACS_DATA_TLM_MID), {0, 0}, 16},
+        #endif
 #ifdef CFS_SBN_ENABLED
         {CFE_SB_MSGID_WRAP_VALUE(SBN_HK_TLM_MID),         {0, 0}, 1},
         {CFE_SB_MSGID_WRAP_VALUE(SBN_HKNET_TLM_MID),      {0, 0}, 1},

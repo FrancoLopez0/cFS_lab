@@ -108,6 +108,7 @@ CFE_Status_t ACS_APP_Init(void){
         }
     }
 
+    // encapsular en funcion
     ACS_APP_Data.Mpu.file = open("/dev/i2c-1", O_RDWR);
 
     if( ACS_APP_Data.Mpu.file < 0 ){

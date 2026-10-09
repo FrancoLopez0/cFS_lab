@@ -6,7 +6,7 @@ static uint8_t mpu6050_addr;
 static int mpu6050_file;
 
 
-static inline void mpu6050_write(uint8_t reg, uint8_t *src, uint8_t len) {
+static inline int mpu6050_write(uint8_t reg, uint8_t *src, uint8_t len) {
     // Array completo para enviar
     uint8_t buff[20] = {0};
     if(len > sizeof(buff) - 1){
@@ -20,15 +20,21 @@ static inline void mpu6050_write(uint8_t reg, uint8_t *src, uint8_t len) {
     if( write(mpu6050_file, buff, len + 1) != (ssize_t) (len +1)){
         return -1;
     }
-    
+
     return 0;
 }
 
-static inline void mpu6050_read(uint8_t reg, uint8_t *dst, uint8_t len) {
+static inline int mpu6050_read(uint8_t reg, uint8_t *dst, uint8_t len) {
  
-    write(mpu6050_file, &reg, 1);
+    if( write(mpu6050_file, &reg, 1) != 1){
+        return -1;
+    }
 
-    read(mpu6050_file, dst, len);
+    if( read(mpu6050_file, dst, len) != (ssize_t)len){
+        return -1;
+    }
+
+    return 0;
 }
 
 void sleep_ms(int time){
@@ -117,32 +123,42 @@ uint8_t mpu6050_who_am_i(void) {
     return who_am_i;
 }
 
-void mpu6050_read_accel(mpu_accel_t *accel) {
+int mpu6050_read_accel(mpu_accel_t *accel) {
     // Array para guardar valores
 	uint8_t dst[6] = {0};
 	// Leer 14 bytes del MPU6050
-    mpu6050_read(ACCEL_XOUT_H_REG, dst, 6);
+    if( mpu6050_read(ACCEL_XOUT_H_REG, dst, 6) != 0){
+        return -1;
+    }
     // Ajusto valores de aceleracion
     accel->accel_x = (int16_t)(dst[0] << 8 | dst[1]);
     accel->accel_y = (int16_t)(dst[2] << 8 | dst[3]);
     accel->accel_z = (int16_t)(dst[4] << 8 | dst[5]);
+
+    return 0;
 }
 
-void mpu6050_read_gyro(mpu_gyro_t *gyro) {
+int mpu6050_read_gyro(mpu_gyro_t *gyro) {
     // Array para guardar valores
 	uint8_t dst[6] = {0};
 	// Leer 14 bytes del MPU6050
-    mpu6050_read(GYRO_XOUT_H_REG, dst, 6);
+    if( mpu6050_read(GYRO_XOUT_H_REG, dst, 6) != 0){
+        return -1;
+    }
     // Ajusto valores de aceleracion
     gyro->gyro_x = (int16_t)(dst[0] << 8 | dst[1]);
     gyro->gyro_y = (int16_t)(dst[2] << 8 | dst[3]);
     // printf("raw %d , %d \n", dst[2], dst[3]);
     gyro->gyro_z = (int16_t)(dst[4] << 8 | dst[5]);
+
+    return 0;
 }
 
-void mpu6050_get_accel(mpu6050_t *data){
+int mpu6050_get_accel(mpu6050_t *data){
     // Leer acelerometro
-    mpu6050_read_accel(&data->raw_accel);
+    if( mpu6050_read_accel(&data->raw_accel) != 0){
+        return -1;
+    }
     
     // Convertir a flotantes
     if(data->accel_range == RANGE_2G) {
@@ -166,11 +182,15 @@ void mpu6050_get_accel(mpu6050_t *data){
     data->accel_x -= data->offset_accel_x;
     data->accel_y -= data->offset_accel_y;
     data->accel_z -= data->offset_accel_z;
+
+    return 0;
 }
 
-void mpu6050_get_gyro(mpu6050_t *data){
+int mpu6050_get_gyro(mpu6050_t *data){
     // Leer giroscopio
-    mpu6050_read_gyro(&data->raw_gyro);
+    if( mpu6050_read_gyro(&data->raw_gyro) != 0){
+        return -1;
+    }
     
     // Convertir a flotantes
     if(data->gyro_range == RANGE_250DPS) {
@@ -194,13 +214,26 @@ void mpu6050_get_gyro(mpu6050_t *data){
     data->gyro_x -= data->offset_gyro_x;
     data->gyro_y -= data->offset_gyro_y;
     data->gyro_z -= data->offset_gyro_z;
+
+    return 0;
+
 }
 
-void mpu6050_get_data(mpu6050_t *data) {
+int mpu6050_get_data(mpu6050_t *data) {
+    
+    mpu6050_t sample = *data;
+
     // Leer acelerometro
-    mpu6050_get_accel(data);
+    if(mpu6050_get_accel(&sample) != 0){
+        return -1;
+    }
     // Leer giroscopio
-    mpu6050_get_gyro(data);
+    if(mpu6050_get_gyro(data) != 0){
+        return -1;
+    }
+
+    *data = sample;
+    return 0;
 }
 
 void mpu6050_read_temp(int16_t *temp) {

@@ -110,12 +110,12 @@ typedef struct {
 void mpu6050_init(mpu6050_t *mpu6050);
 void mpu6050_reset(void);
 uint8_t mpu6050_who_am_i(void);
-void mpu6050_read_accel(mpu_accel_t *accel);
-void mpu6050_read_gyro(mpu_gyro_t *gyro);
+int mpu6050_read_accel(mpu_accel_t *accel);
+int mpu6050_read_gyro(mpu_gyro_t *gyro);
 void mpu6050_read_temp(int16_t *temp);
-void mpu6050_get_accel(mpu6050_t *data);
-void mpu6050_get_gyro(mpu6050_t *data);
-void mpu6050_get_data(mpu6050_t *data);
+int mpu6050_get_accel(mpu6050_t *data);
+int mpu6050_get_gyro(mpu6050_t *data);
+int mpu6050_get_data(mpu6050_t *data);
 void mpu6050_calibrate(mpu6050_t *mpu6050);
 int16_t mpu6050_get_fifo_count(void);
 void mpu6050_set_fifo(uint8_t fifo_config);

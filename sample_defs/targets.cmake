@@ -152,3 +152,8 @@ endif (CFE_EDS_ENABLED)
 if (NOT CFE_EDS_ENABLED)
     list(APPEND cpu1_APPLIST acs)
 endif()
+
+# cfs.py: mcs (cpu1)
+if (NOT CFE_EDS_ENABLED)
+    list(APPEND cpu1_APPLIST mcs)
+endif()

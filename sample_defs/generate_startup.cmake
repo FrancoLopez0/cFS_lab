@@ -19,6 +19,14 @@ function (generate_cfs_startup_script CFS_INSTALL_DIR)
         )
     endif()
 
+    # cfs.py: mcs
+    list(FIND ARGN mcs MCS_START_INDEX)
+    if (MCS_START_INDEX GREATER -1)
+        file(APPEND ${STARTUP_FILE}
+            "CFE_APP, mcs, MCS_AppMain, MCS, 55, 32768, 0x0, 0;\n"
+        )
+    endif()
+
     # the rest of the apps can vary by config
     set(CFS_APP_STARTUP_ORDER lc cf ds fm hk hs mm sc md cs sbn)
     foreach(APP ${CFS_APP_STARTUP_ORDER})
